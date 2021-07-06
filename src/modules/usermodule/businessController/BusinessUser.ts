@@ -24,7 +24,6 @@ class BusinessUser {
         } else {
             let listUser: Array<IUser> = await UsersModel.find();
             return listUser;
-
         }
     }
     //addUsers

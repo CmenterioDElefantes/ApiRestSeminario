@@ -1,6 +1,7 @@
 import RoutesController from "./routeController/RoutesController";
 import jsonwebtokenSecurity from "./middleware";
 import { Express } from "express";
+import ClientController from "./routeController/ClientController";
 class Routes {
   private routesController: RoutesController;
   private routeparent: string;
@@ -8,6 +9,7 @@ class Routes {
     this.routesController = new RoutesController();
     this.routeparent = routeparent;
     this.configureRoutes(app);
+    this.configureClientRoutes(app);
   }
   private configureRoutes(app: Express) {
     //**--USER ROUTES--------------------------------------------------------------------------------------- */
@@ -48,6 +50,30 @@ class Routes {
     app
       .route(`${this.routeparent}/roles/`)
       .get(this.routesController.getRoles);
+  }
+  private configureClientRoutes(app:Express){
+    const clientController = new ClientController();
+    app
+      .route(`${this.routeparent}/clients`)
+      .post(clientController.createClient);
+    app
+      .route(`${this.routeparent}/clients`)
+      .get(clientController.listClients);
+    app
+      .route(`${this.routeparent}/clients/:id`)
+      .get(clientController.getClient);
+    app
+      .route(`${this.routeparent}/clients/:id`)
+      .put(clientController.updateClient);
+    app
+      .route(`${this.routeparent}/clients/:id`)
+      .delete(clientController.removeClient);
+    app
+      .route(`${this.routeparent}/uploadclientphoto/:id`)
+      .post(clientController.uploadPhoto);
+    app
+      .route(`${this.routeparent}/getclientphoto/:id`)
+      .get(clientController.getClientPlacePhoto);
   }
 }
 export default Routes;
