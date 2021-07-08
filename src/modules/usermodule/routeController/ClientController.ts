@@ -11,32 +11,51 @@ class ClientController {
   public async createClient(request: Request, response: Response) {
     var clientData = request.body;
     clientData["registerdate"] = new Date();
-    let result = await client.addClient(clientData);
-    response.status(201).json({ serverResponse: result });
+    client.addClient(clientData).then((client:IClient) => {
+        response.status(201).json({ serverResponse: client });   
+    }).catch(err => {
+        console.log('Create Client Error:', err);
+        response.status(403).json({ serverResponse: err });
+    });
+    
   }
   public async listClients(request: Request, response: Response) {
-    const result: Array<IClient> = await client.listClients(request.query);
-    response.status(200).json({ serverResponse: result });
+      
+    client.listClients(request.query.query,request.query.options).then((clients: Array<IClient>) => {
+        response.status(200).json({ serverResponse: clients });
+    }).catch( err => {
+        console.log('List Client Error:', err);
+        response.status(403).json({ serverResponse: err });
+    });
+    
   }
   public async getClient(request: Request, response: Response) {
     let id: string = request.params.id;
-    var result: IClient = await client.getClient(id);
-    if (!result) {
-        response.status(300).json({ serverResponse: "El usuario no existe!" });
-        return;
-      }
-    response.status(200).json({ serverResponse: result });
+    client.getClient(id).then((client: IClient) => {
+        response.status(200).json({ serverResponse: client });
+    }).catch( err => {
+        console.log('Get Client Error:', err);
+        response.status(300).json({ serverResponse: "El usuario no existe!"});
+    });
   }
   public async updateClient(request: Request, response: Response) {
     let id: string = request.params.id;
     var params = request.body;
-    var result = await client.updateClient(id, params);
-    response.status(200).json({ serverResponse: result });
+    client.updateClient(id, params).then((client: IClient) => {
+        response.status(200).json({ serverResponse: client });
+    }).catch( err => {
+        console.log('Update client error: ', err);
+        response.status(300).json({ serverResponse: "El usuario no existe!"});
+    });
   }
   public async removeClient(request: Request, response: Response) {
     let id: string = request.params.id;
-    let result = await client.deleteClient(id);
-    response.status(200).json({ serverResponse: result });
+    client.deleteClient(id).then((client: IClient) => {
+        response.status(200).json({ serverResponse: client });
+    }).catch( err => {
+        console.log('Delete Client error: ',err);
+        response.status(300).json({ serverResponse: "El usuario no existe!"});
+    });
   }
   
   public async uploadPhoto(request: Request, response: Response) {
@@ -47,7 +66,12 @@ class ClientController {
         .json({ serverResponse: "El id es necesario para subir una foto" });
       return;
     }
-    var clientToUpdate: IClient = await client.getClient(id);
+    var clientToUpdate: IClient | undefined = await client.getClient(id).then( client => {
+        return client;
+    }).catch(err => {
+        console.log('update user error', err);
+        return undefined;
+    });
     if (!clientToUpdate) {
       response.status(300).json({ serverResponse: "El usuario no existe!" });
       return;
@@ -102,7 +126,12 @@ class ClientController {
         .json({ serverResponse: "Identificador no encontrado" });
       return;
     }
-    var clientData: IClient = await client.getClient(id);
+    var clientData: IClient | undefined = await client.getClient(id).then( client => {
+        return client;
+    }).catch(err => {
+        console.log('client find photo', err);
+        return undefined;
+    });
     if (!clientData) {
       response.status(300).json({ serverResponse: "Error " });
       return;

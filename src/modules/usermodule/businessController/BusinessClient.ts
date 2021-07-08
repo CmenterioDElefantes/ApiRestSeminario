@@ -6,14 +6,15 @@ class BusinessClient{
      * OverLoad
      * 
      * **/
-    public async listClients(query?: any, skip?: number, limit?: number): Promise<Array<IClient>>{
+    public async listClients(query?: any,options?: any): Promise<Array<IClient>>{
         if (query) {
             var listClients: Array<IClient> = [];
-            if( skip || limit )
-                listClients = await ClientModel.find(query).skip(skip).limit(limit);
+            if(options.limit && !options.skip)
+                options.skip = 0;
+            if( options )
+                return ClientModel.find(query,null,options);
             else
-                listClients = await ClientModel.find(query);
-            return listClients;
+                return ClientModel.find(query);
         } else {
             let listClients: Array<IClient> = await ClientModel.find();
             return listClients;
@@ -21,28 +22,23 @@ class BusinessClient{
     }
 
     public async getClient(id: string ): Promise<IClient> {
-        var result: IClient = await ClientModel.findOne({ _id: id });
-        return result;
+        return ClientModel.findOne({ _id: id });
     }
 
-    public async addClient(client: IClient) {
+    public async addClient(client: IClient): Promise<IClient> {
         try {
             let clientDB = new ClientModel(client);
-            let result = await clientDB.save();
-            return result;
+            return clientDB.save();
         } catch (err) {
-            return err;
+            Promise.reject(err);
         }
     }
 
-    public async updateClient(id: string, client: any) {
-
-        let result = await ClientModel.update({ _id: id }, { $set: client });
-        return result;
+    public async updateClient(id: string, client: any): Promise<IClient> {
+        return ClientModel.findByIdAndUpdate({ _id: id }, { $set: client });
     }
-    public async deleteClient(id: string) {
-        let result = await ClientModel.remove({ _id: id });
-        return result;
+    public async deleteClient(id: string): Promise<IClient> {
+        return ClientModel.remove({ _id: id });
     }
 }
 export default BusinessClient;
