@@ -1,3 +1,4 @@
+import onjectDefracment from "../../../utils/objectDefracment";
 import ClientModel, { IClient } from "../models/Clients";
 class BusinessClient{
     constructor() {
@@ -8,13 +9,13 @@ class BusinessClient{
      * **/
     public async listClients(query?: any,options?: any): Promise<Array<IClient>>{
         if (query) {
-            var listClients: Array<IClient> = [];
-            if(options.limit && !options.skip)
-                options.skip = 0;
-            if( options )
-                return ClientModel.find(query,null,options);
+            if( options ) {
+                if(options.limit && !options.skip)
+                    options.skip = 0;
+                return ClientModel.find(onjectDefracment(query),null,onjectDefracment(options));
+            }
             else
-                return ClientModel.find(query);
+                return ClientModel.find(onjectDefracment(query));
         } else {
             let listClients: Array<IClient> = await ClientModel.find();
             return listClients;

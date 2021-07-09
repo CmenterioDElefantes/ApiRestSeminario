@@ -2,6 +2,7 @@ import RoutesController from "./routeController/RoutesController";
 import jsonwebtokenSecurity from "./middleware";
 import { Express } from "express";
 import ClientController from "./routeController/ClientController";
+import ScheduleController from "./routeController/ScheduleController";
 class Routes {
   private routesController: RoutesController;
   private routeparent: string;
@@ -74,6 +75,24 @@ class Routes {
     app
       .route(`${this.routeparent}/getclientphoto/:id`)
       .get(clientController.getClientPlacePhoto);
+  }
+  private configureScheduleRoutes(app:Express){
+    const scheduleController = new ScheduleController();
+    app
+      .route(`${this.routeparent}/schedules`)
+      .post(scheduleController.create);
+    app
+      .route(`${this.routeparent}/schedules`)
+      .get(scheduleController.list);
+    app
+      .route(`${this.routeparent}/schedules/:id`)
+      .get(scheduleController.get);
+    app
+      .route(`${this.routeparent}/schedules/:id`)
+      .put(scheduleController.update);
+    app
+      .route(`${this.routeparent}/schedules/:id`)
+      .delete(scheduleController.remove);
   }
 }
 export default Routes;
