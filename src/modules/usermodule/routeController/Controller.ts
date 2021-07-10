@@ -8,7 +8,7 @@ class Controller<IModel> {
     this.Business = business;
     this.Name = name;
   }
-  public async create(request: Request, response: Response) {
+  create = (request: Request, response: Response) => {
     var data = request.body;
     data["registerdate"] = new Date();
     this.Business.store(data).then((reg:IModel) => {
@@ -19,8 +19,7 @@ class Controller<IModel> {
     });
     
   }
-  public async list(request: Request, response: Response) {
-      
+  list = (request: Request, response: Response) => {
     this.Business.list(request.query.query,request.query.options).then((registers: Array<IModel>) => {
         response.status(200).json({ serverResponse: registers });
     }).catch( err => {
@@ -28,7 +27,7 @@ class Controller<IModel> {
         response.status(403).json({ serverResponse: err });
     });
   }
-  public async get(request: Request, response: Response) {
+  get = (request: Request, response: Response) => {
     let id: string = request.params.id;
     this.Business.get(id).then((reg: IModel) => {
         response.status(200).json({ serverResponse: reg });
@@ -37,7 +36,7 @@ class Controller<IModel> {
         response.status(300).json({ serverResponse: `El ${this.Name} no esta registrado`});
     });
   }
-  public async update(request: Request, response: Response) {
+  update = (request: Request, response: Response) => {
     let id: string = request.params.id;
     var params = request.body;
     this.Business.update(id, params).then((reg: IModel) => {
@@ -47,7 +46,7 @@ class Controller<IModel> {
         response.status(300).json({ serverResponse: `El ${this.Name} no existe!`});
     });
   }
-  public async remove(request: Request, response: Response) {
+  remove = (request: Request, response: Response) => {
     let id: string = request.params.id;
     this.Business.delete(id).then((reg: IModel) => {
         response.status(200).json({ serverResponse: reg });

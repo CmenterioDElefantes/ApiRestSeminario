@@ -34,7 +34,7 @@ export interface IClient extends Document {
   calle?: string,
   tipocliente?: string,
 }
-const clientSchema: Schema = new Schema({
+export const clientSchema: Schema = new Schema({
   first_name: { type: String , required: true },
   last_name: { type: String , required: true },
   telf: { type: String },

@@ -11,6 +11,7 @@ class Routes {
     this.routeparent = routeparent;
     this.configureRoutes(app);
     this.configureClientRoutes(app);
+    this.configureScheduleRoutes(app);
   }
   private configureRoutes(app: Express) {
     //**--USER ROUTES--------------------------------------------------------------------------------------- */
