@@ -8,6 +8,7 @@ export interface ISimpleSchedule {
   time: string,
   finished: boolean,
   reason?: string,
+  result?: boolean,
   registerdate?: Date,
 }
 export interface ISchedule extends Document {
@@ -17,6 +18,7 @@ export interface ISchedule extends Document {
   time: string,
   finished: boolean,
   reason?: string,
+  result?: boolean,
   registerdate?: Date,
 }
 const scheduleSchema: Schema = new Schema({
@@ -26,6 +28,7 @@ const scheduleSchema: Schema = new Schema({
   time: {type: String, required: true},
   finished: {type: Boolean, default: false},
   reason: {type: String},
+  result: {type: Boolean, default: true },
   registerdate: {type: Date, required: true},
 });
 export default mongoose.model<ISchedule>("Schedule", scheduleSchema);

@@ -3,6 +3,7 @@ import jsonwebtokenSecurity from "./middleware";
 import { Express } from "express";
 import ClientController from "./routeController/ClientController";
 import ScheduleController from "./routeController/ScheduleController";
+import ProductController from "./routeController/ProductController";
 class Routes {
   private routesController: RoutesController;
   private routeparent: string;
@@ -12,6 +13,7 @@ class Routes {
     this.configureRoutes(app);
     this.configureClientRoutes(app);
     this.configureScheduleRoutes(app);
+    this.configureProductRoutes(app);
   }
   private configureRoutes(app: Express) {
     //**--USER ROUTES--------------------------------------------------------------------------------------- */
@@ -94,6 +96,30 @@ class Routes {
     app
       .route(`${this.routeparent}/schedules/:id`)
       .delete(scheduleController.remove);
+  }
+  private configureProductRoutes(app:Express){
+    const productController = new ProductController();
+    app
+      .route(`${this.routeparent}/products`)
+      .post(productController.create);
+    app
+      .route(`${this.routeparent}/products`)
+      .get(productController.list);
+    app
+      .route(`${this.routeparent}/products/:id`)
+      .get(productController.get);
+    app
+      .route(`${this.routeparent}/products/:id`)
+      .put(productController.update);
+    app
+      .route(`${this.routeparent}/products/:id`)
+      .delete(productController.remove);
+    app
+      .route(`${this.routeparent}/uploadproductphoto/:id`)
+      .post(productController.uploadPhoto);
+    app
+      .route(`${this.routeparent}/getproductphoto/:id`)
+      .get(productController.getProductPhoto);
   }
 }
 export default Routes;
