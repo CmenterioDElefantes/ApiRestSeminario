@@ -37,6 +37,7 @@ class RoutesController {
       );
       response.status(200).json({
         serverResponse: {
+          _id: loginUser._id,
           email: loginUser.email,
           username: loginUser.username,
           token,

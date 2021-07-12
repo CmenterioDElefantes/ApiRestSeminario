@@ -4,6 +4,7 @@ import { Express } from "express";
 import ClientController from "./routeController/ClientController";
 import ScheduleController from "./routeController/ScheduleController";
 import ProductController from "./routeController/ProductController";
+import OrderController from "./routeController/OrderController";
 class Routes {
   private routesController: RoutesController;
   private routeparent: string;
@@ -14,6 +15,7 @@ class Routes {
     this.configureClientRoutes(app);
     this.configureScheduleRoutes(app);
     this.configureProductRoutes(app);
+    this.configureOrderRoutes(app);
   }
   private configureRoutes(app: Express) {
     //**--USER ROUTES--------------------------------------------------------------------------------------- */
@@ -120,6 +122,24 @@ class Routes {
     app
       .route(`${this.routeparent}/getproductphoto/:id`)
       .get(productController.getProductPhoto);
+  }
+  private configureOrderRoutes(app:Express){
+    const orderController = new OrderController();
+    app
+      .route(`${this.routeparent}/orders`)
+      .post(orderController.create);
+    app
+      .route(`${this.routeparent}/orders`)
+      .get(orderController.list);
+    app
+      .route(`${this.routeparent}/orders/:id`)
+      .get(orderController.get);
+    app
+      .route(`${this.routeparent}/orders/:id`)
+      .put(orderController.update);
+    app
+      .route(`${this.routeparent}/orders/:id`)
+      .delete(orderController.remove);
   }
 }
 export default Routes;

@@ -21,4 +21,4 @@ export const ProductoSchema: Schema = new Schema({
   uri_photo: {type: String},
   path_photo: {type: String},
 });
-export default mongoose.model<IProducto>("Producto", ProductoSchema);
+export default mongoose.model<IProducto>("product", ProductoSchema);

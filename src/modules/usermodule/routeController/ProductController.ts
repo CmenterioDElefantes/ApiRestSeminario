@@ -69,7 +69,7 @@ export default class ProductController extends Controller<IProducto> {
     response.status(300).json({ serverResponse: simpleProduct });
   }
 
-  public async getProductPhoto(request: Request, response: Response) {
+  public getProductPhoto = async (request: Request, response: Response) => {
     var id: string = request.params.id;
     if (!id) {
       response
